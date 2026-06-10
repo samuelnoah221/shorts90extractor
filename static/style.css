@@ -51,3 +51,49 @@
         font-size: 24px; /* Scale down the huge title so it doesn't wrap weirdly */
     }
             }
+/* ==========================================
+   🎨 DYNAMIC BACKDROP LIGHTING CONTROLS
+   ========================================== */
+body.light-theme {
+    color: #0f172a !important;
+}
+
+body.light-theme .panel {
+    background: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+    color: #0f172a !important;
+}
+
+body.light-theme .panel h3, body.light-theme .panel label {
+    color: #1e293b !important;
+}
+
+body.light-theme .input-group input {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #94a3b8 !important;
+}
+
+body.light-theme .console-box {
+    background: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+/* Navbar specific adjustments for mobile sizing integration */
+.theme-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .theme-control {
+        margin-top: 10px;
+        width: 100%;
+    }
+    #themeSelect {
+        width: 60%;
+        padding: 8px;
+    }
+   }
