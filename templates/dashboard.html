@@ -1,63 +1,109 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="dashboard-grid">
+<div class="dashboard-container" style="max-width: 1400px; margin: 0 auto; padding: 20px;">
     
-    <div class="panel settings-panel">
-        <h3>🚀 Multi-Platform Cloud Ingestion</h3>
-        <form action="/process" method="POST" enctype="multipart/form-data">
-            
-            <div class="input-group">
-                <label>Paste Cloud Video URL (YouTube, Twitter, Facebook, etc.):</label>
-                <input type="url" name="source_url" placeholder="https://www.youtube.com/watch?v=...">
-            </div>
-            
-            <div style="text-align: center; margin: 15px 0; color: #64748b; font-weight: bold; font-size:12px;">- OR CHOOSE LOCAL DEVICE PAYLOAD -</div>
-            
-            <div class="input-group">
-                <label>Upload or Drag & Drop Video File:</label>
-                <div style="border: 2px dashed #475569; padding: 25px; border-radius: 6px; text-align: center; background: #0f172a; cursor: pointer; position: relative;">
-                    <span style="color: #94a3b8; font-size: 14px;">Drag video directly here or click to select file</span>
-                    <input type="file" name="video_file" accept="video/*" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+    <div class="ad-slot top-leaderboard" style="background: #1e293b; border: 2px dashed #38bdf8; padding: 20px; text-align: center; margin-bottom: 25px; border-radius: 8px;">
+        <p style="color: #64748b; margin: 0 0 5px 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;">Premium Advertisement Zone</p>
+        <a href="#" style="color: #38bdf8; font-weight: bold; text-decoration: none; font-size: 15px;">🚀 Upgrade to Shorts90 Premium — Remove Ads & Unlock Ultra-HD Rendering Matrix</a>
+    </div>
+
+    <div class="dashboard-grid" style="display: grid; grid-template-columns: 1.2fr 1fr 0.8fr; gap: 20px;">
+        
+        <div class="panel settings-panel" style="background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155;">
+            <h3 style="color: #38bdf8; margin-top: 0; font-size: 18px;">🔗 Cloud Media Ingestion</h3>
+            <form action="/process" method="POST" enctype="multipart/form-data" onsubmit="showProcessingState()">
+                
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 13px;">Paste Video Link (YouTube, X, TikTok, FB):</label>
+                    <input type="url" name="source_url" placeholder="https://www.youtube.com/watch?v=..." style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 6px;">
+                </div>
+                
+                <div style="text-align: center; margin: 15px 0; color: #64748b; font-weight: bold; font-size:11px; letter-spacing: 1px;">- OR DRAG LOCAL FILE -</div>
+                
+                <div class="input-group" style="margin-bottom: 20px;">
+                    <div style="border: 2px dashed #475569; padding: 30px 15px; border-radius: 8px; text-align: center; background: #0f172a; cursor: pointer; position: relative;">
+                        <span style="color: #94a3b8; font-size: 13px;">Drag video file here or click to browse</span>
+                        <input type="file" name="video_file" accept="video/*" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                    </div>
+                </div>
+
+                <h3 style="color: #38bdf8; margin-top: 25px; font-size: 18px;">🛠️ Smart Framing Options</h3>
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 13px;">Processing Strategy Mode:</label>
+                    <select name="processing_mode" style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 6px; cursor: pointer;">
+                        <option value="smart_fit">Smart-Fit Padding (Keeps Words & Text Safe) 💎</option>
+                        <option value="direct_crop">Centerpiece Proportional Vertical Bleed Crop</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="run-btn" style="width: 100%; background: #0284c7; color: white; padding: 15px; border: none; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; transition: 0.2s;">✨ Execute Extraction Pipeline</button>
+            </form>
+        </div>
+
+        <div class="panel status-panel" style="background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="color: #38bdf8; margin-top: 0; font-size: 18px;">📊 Pipeline Engine Monitor</h3>
+                <div class="console-box" style="background: #0f172a; border: 1px solid #334155; padding: 15px; border-radius: 6px; min-height: 120px; font-family: monospace; font-size: 13px; color: #34d399;">
+                    <p id="status-text" style="margin: 0;">🟢 Core environment operational. Ready to ingest media layers...</p>
+                </div>
+                
+                <div id="processing-loader" style="display: none; margin-top: 25px; text-align: center;">
+                    <h4 style="color: #fbbf24; margin-bottom: 10px;">⚡ Processing Video Rendering Streams...</h4>
+                    <div style="background: #0f172a; border-radius: 10px; height: 10px; width: 100%; overflow: hidden;">
+                        <div style="background: linear-gradient(90deg, #38bdf8, #8b5cf6); height: 100%; width: 50%; animation: loadingMove 1.5s infinite linear;"></div>
+                    </div>
+                    <p style="color: #94a3b8; font-size: 12px; margin-top: 8px;">Please hold tight! Do not close this window while the engine clips and pads your media dimensions.</p>
                 </div>
             </div>
 
-            <hr style="border-color: #334155; margin: 20px 0;">
-
-            <h3>🛠️ Smart Formatting Matrix</h3>
-            <div class="input-group">
-                <label>Render Processing Style Strategy:</label>
-                <select name="processing_mode" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px;">
-                    <option value="smart_fit">Smart-Fit Outer Padding (Compresses Frame - Keeps Words Safe) 💎</option>
-                    <option value="direct_crop">Centerpiece Proportional Vertical Bleed Crop</option>
-                </select>
-            </div>
-            
-            <h4 style="margin-top:20px; color: #94a3b8;">🎯 Watermark Matrix Eraser Bounds (Optional)</h4>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                <div class="input-group"><label>X position:</label><input type="number" name="x" value="0"></div>
-                <div class="input-group"><label>Y position:</label><input type="number" name="y" value="0"></div>
-                <div class="input-group"><label>Width:</label><input type="number" name="w" value="100"></div>
-                <div class="input-group"><label>Height:</label><input type="number" name="h" value="50"></div>
-            </div>
-            
-            <button type="submit" class="run-btn" style="width: 100%; margin-top: 20px;">✨ Execute Intelligent Extraction Pipeline</button>
-        </form>
-    </div>
-
-    <div class="panel status-panel" style="display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-            <h3>📊 Engine Stream Monitor</h3>
-            <div class="console-box">
-                <p class="status-text">Core environment operational. Awaiting link stream ingestion payloads or local drag-drops...</p>
+            <div class="ad-slot sidebar-square" style="background: #0f172a; border: 2px dashed #ec4899; padding: 15px; border-radius: 8px; text-align: center; margin-top: 20px;">
+                <p style="color: #64748b; margin: 0 0 5px 0; font-size: 10px; text-transform: uppercase;">Sponsored Ad Placement Block</p>
+                <span style="color: #e2e8f0; font-size: 13px; font-weight: bold; display: block; margin-bottom: 5px;">🎮 Play Free Premium Online Gaming Arenas!</span>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0;">Click to instant launch classic cross-platform tournaments with zero download required.</p>
             </div>
         </div>
 
-        <div style="background: #0f172a; border: 2px dashed #cbd5e1; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
-            <p style="color: #64748b; margin: 0 0 5px 0; font-size: 11px; text-transform: uppercase;">Premium Ad Banner Network Placement</p>
-            <h4 style="color: #f43f5e; margin: 5px 0;">Monetize Traffic Instantly</h4>
-            <p style="color: #94a3b8; font-size: 13px; margin: 0;">Once live traffic scales up, we can plug your unique ad scripts or crypto donation nodes right into this structural interface placeholder slot.</p>
-        </div>
-    </div>
+        <div class="panel tools-panel" style="background: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+                <h3 style="color: #94a3b8; margin-top: 0; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">💎 AI Pro Extensions</h3>
+                
+                <div style="background: #0f172a; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 3px solid #64748b; opacity: 0.6;">
+                    <h4 style="margin: 0 0 5px 0; font-size: 14px; color: #e2e8f0;">🎙️ AI Auto-Subtitles Captions</h4>
+                    <p style="margin: 0; font-size: 12px; color: #94a3b8;">Locked — Upgrade to premium tier accounts to auto-generate colorful text layouts over cuts.</p>
+                </div>
 
+                <div style="background: #0f172a; padding: 12px; border-radius: 6px; border-left: 3px solid #64748b; opacity: 0.6;">
+                    <h4 style="margin: 0 0 5px 0; font-size: 14px; color: #e2e8f0;">📈 Social Media Virality Metric</h4>
+                    <p style="margin: 0; font-size: 12px; color: #94a3b8;">Locked — Scans hooks and sound curves to evaluate projected algorithm performance scores.</p>
+                </div>
+            </div>
+
+            <div class="ad-slot sidebar-tall" style="background: #0f172a; border: 2px dashed #a855f7; padding: 15px; border-radius: 8px; text-align: center; margin-top: 20px;">
+                <p style="color: #64748b; margin: 0 0 5px 0; font-size: 10px; text-transform: uppercase;">Monetized Ad Network Slot</p>
+                <span style="color: #a855f7; font-weight: bold; font-size: 13px; display: block; margin-bottom: 5px;">🔥 Grow Your Channels Fast</span>
+                <p style="color: #94a3b8; font-size: 11px; margin: 0;">Get targeted organic video views running premium distribution automation loops safely.</p>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<script>
+    function showProcessingState() {
+        document.getElementById('status-text').innerText = "⏳ Ingesting media stream matrix... Booting core rendering engine pipelines...";
+        document.getElementById('status-text').style.color = "#fbbf24";
+        document.getElementById('processing-loader').style.clipPath = "none";
+        document.getElementById('processing-loader').style.display = "block";
+    }
+</script>
+
+<style>
+    @keyframes loadingMove {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(200%); }
+    }
+    @media (max-width: 1024px) {
+        .dashboard-grid { grid-template-columns: 1fr !important; }
+    }
+</style>
 {% endblock %}
