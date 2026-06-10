@@ -5,11 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shorts90 Extractor Pro</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-<body>
+<body id="master-body">
 
     <nav class="navbar">
         <div class="logo">🎬 Shorts90 Pro</div>
+        
+        <div class="theme-control">
+            <label for="themeSelect" style="color: #cbd5e1; font-size: 13px; font-weight: bold; margin-right: 8px;">🎨 Theme Matrix:</label>
+            <select id="themeSelect" onchange="applyMatrixTheme()" style="padding: 6px 10px; background: #0f172a; color: white; border: 1px solid #475569; border-radius: 4px; cursor: pointer;">
+                <option value="dark">Deep Black Only</option>
+                <option value="light">Pure White Only</option>
+                <option value="gradient">Dynamic Color Mixture</option>
+            </select>
+        </div>
+
         <ul class="nav-links">
             <li><a href="{{ url_for('home') }}">Home</a></li>
             <li><a href="{{ url_for('dashboard') }}">Workspace Dashboard</a></li>
@@ -20,5 +31,81 @@
         {% block content %}{% endblock %}
     </div>
 
+    <script>
+        // Array of unique color pairs and randomized CSS direction options
+        const gradientMixtures = [
+            ['#ec4899', '#8b5cf6'], // Pink to Purple
+            ['#3b82f6', '#10b981'], // Blue to Green
+            ['#f59e0b', '#ef4444'], // Amber to Red
+            ['#00c6ff', '#0072ff'], // Neon Blue Mix
+            ['#f857a6', '#ff5858']  // Coral Dream
+        ];
+        
+        const directions = ['to right', 'to bottom', 'to bottom right', 'to top right'];
+        let lastGradientIndex = -1;
+
+        function applyMatrixTheme() {
+            const body = document.getElementById('master-body');
+            const selection = document.getElementById('themeSelect').value;
+            
+            // Clean slate values
+            body.style.background = "";
+            body.className = "";
+
+            if (selection === "dark") {
+                body.style.backgroundColor = "#0f172a";
+                body.classList.add("dark-theme");
+            } 
+            else if (selection === "light") {
+                body.style.backgroundColor = "#ffffff";
+                body.classList.add("light-theme");
+            } 
+            else if (selection === "gradient") {
+                // Select a non-repeating index randomly from our grid selection
+                let newIndex;
+                do {
+                    newIndex = Math.floor(Math.random() * gradientMixtures.length);
+                } while (newIndex === lastGradientIndex);
+                
+                lastGradientIndex = newIndex;
+                const pickedColors = gradientMixtures[newIndex];
+                const pickedDirection = directions[Math.floor(Math.random() * directions.length)];
+                
+                body.style.background = `linear-gradient(${pickedDirection}, ${pickedColors[0]}, ${pickedColors[1]})`;
+                body.style.backgroundAttachment = "fixed";
+            }
+        }
+
+        // Logic check to trigger Google-style emoji explosion if redirected from a pipeline success action
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.location.search.includes('success=true') || document.body.innerText.includes('Pipeline Complete')) {
+                triggerCelebrationMatrix();
+            }
+        });
+
+        function triggerCelebrationMatrix() {
+            // High-energy emoji burst using canvas-confetti options
+            const scalar = 3;
+            const partyEmoji = confetti.shapeFromText({ text: '🎉', scalar });
+            const heartEmoji = confetti.shapeFromText({ text: '❤', scalar });
+            const explosionEmoji = confetti.shapeFromText({ text: '💥', scalar });
+            const hundredEmoji = confetti.shapeFromText({ text: '💯', scalar });
+
+            const configurationDefaults = {
+                spread: 360,
+                ticks: 100,
+                gravity: 0.6,
+                decay: 0.96,
+                startVelocity: 25,
+                shapes: [partyEmoji, heartEmoji, explosionEmoji, hundredEmoji],
+                scalar
+            };
+
+            // Shoot multi-directional burst vectors across left and right phone boundaries
+            confetti({ ...configurationDefaults, particleCount: 30, origin: { x: 0.2, y: 0.4 } });
+            confetti({ ...configurationDefaults, particleCount: 30, origin: { x: 0.8, y: 0.4 } });
+            confetti({ ...configurationDefaults, particleCount: 40, origin: { x: 0.5, y: 0.3 } });
+        }
+    </script>
 </body>
 </html>
