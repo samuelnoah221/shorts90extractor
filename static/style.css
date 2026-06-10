@@ -97,3 +97,20 @@ body.light-theme .console-box {
         padding: 8px;
     }
    }
+
+       /* ==========================================
+   🖤 PITCH BLACK BACKGROUND OPTION ADJUSTMENT
+   ========================================== */
+body.pitch-black-theme {
+    background-color: #000000 !important;
+    color: #f8fafc !important;
+}
+
+body.pitch-black-theme .panel {
+    background: #111111 !important;
+    border: 1px solid #222222 !important;
+}
+
+body.pitch-black-theme .input-group input {
+    background: #000000 !important;
+}
