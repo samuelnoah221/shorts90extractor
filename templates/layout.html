@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
-<body id="master-body">
+<body id="master-body" class="dark-theme">
 
     <nav class="navbar">
         <div class="logo">🎬 Shorts90 Pro</div>
@@ -15,9 +15,10 @@
         <div class="theme-control">
             <label for="themeSelect" style="color: #cbd5e1; font-size: 13px; font-weight: bold; margin-right: 8px;">🎨 Theme Matrix:</label>
             <select id="themeSelect" onchange="applyMatrixTheme()" style="padding: 6px 10px; background: #0f172a; color: white; border: 1px solid #475569; border-radius: 4px; cursor: pointer;">
-                <option value="dark">Deep Black Only</option>
-                <option value="light">Pure White Only</option>
-                <option value="gradient">Dynamic Color Mixture</option>
+                <option value="dark">Deep Blue-Slate (Original) 💙</option>
+                <option value="black">Pitch Black Only 🖤</option>
+                <option value="light">Pure White Only 🤍</option>
+                <option value="gradient">Dynamic Color Mixture 🌈</option>
             </select>
         </div>
 
@@ -56,12 +57,15 @@
                 body.style.backgroundColor = "#0f172a";
                 body.classList.add("dark-theme");
             } 
+            else if (selection === "black") {
+                body.style.backgroundColor = "#000000";
+                body.classList.add("pitch-black-theme");
+            }
             else if (selection === "light") {
                 body.style.backgroundColor = "#ffffff";
                 body.classList.add("light-theme");
             } 
             else if (selection === "gradient") {
-                // Select a non-repeating index randomly from our grid selection
                 let newIndex;
                 do {
                     newIndex = Math.floor(Math.random() * gradientMixtures.length);
@@ -84,7 +88,6 @@
         });
 
         function triggerCelebrationMatrix() {
-            // High-energy emoji burst using canvas-confetti options
             const scalar = 3;
             const partyEmoji = confetti.shapeFromText({ text: '🎉', scalar });
             const heartEmoji = confetti.shapeFromText({ text: '❤', scalar });
@@ -101,11 +104,10 @@
                 scalar
             };
 
-            // Shoot multi-directional burst vectors across left and right phone boundaries
             confetti({ ...configurationDefaults, particleCount: 30, origin: { x: 0.2, y: 0.4 } });
             confetti({ ...configurationDefaults, particleCount: 30, origin: { x: 0.8, y: 0.4 } });
             confetti({ ...configurationDefaults, particleCount: 40, origin: { x: 0.5, y: 0.3 } });
         }
     </script>
 </body>
-</html>
+    </html>
