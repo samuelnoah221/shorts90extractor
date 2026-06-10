@@ -16,14 +16,15 @@
                 <div class="input-group" style="margin-bottom: 15px;">
                     <label style="display: block; margin-bottom: 8px; color: #94a3b8; font-size: 13px;">Paste Video Link (YouTube, X, TikTok, FB):</label>
                     <input type="url" name="source_url" placeholder="https://www.youtube.com/watch?v=..." style="width: 100%; padding: 12px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 6px;">
+                    <small style="display: block; margin-top: 5px; color: #64748b; font-size: 11px;">⚡ Safe for ANY length (Extracts a high-performance viral segment instantly).</small>
                 </div>
                 
-                <div style="text-align: center; margin: 15px 0; color: #64748b; font-weight: bold; font-size:11px; letter-spacing: 1px;">- OR DRAG LOCAL FILE -</div>
+                <div style="text-align: center; margin: 15px 0; color: #64748b; font-weight: bold; font-size:11px; letter-spacing: 1px;">- OR CHOOSE FROM PHONE / DESKTOP -</div>
                 
                 <div class="input-group" style="margin-bottom: 20px;">
-                    <div style="border: 2px dashed #475569; padding: 30px 15px; border-radius: 8px; text-align: center; background: #0f172a; cursor: pointer; position: relative;">
-                        <span style="color: #94a3b8; font-size: 13px;">Drag video file here or click to browse</span>
-                        <input type="file" name="video_file" accept="video/*" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                    <div id="drop-zone" style="border: 2px dashed #475569; padding: 30px 15px; border-radius: 8px; text-align: center; background: #0f172a; cursor: pointer; position: relative; transition: 0.2s ease;">
+                        <span id="file-display-name" style="color: #94a3b8; font-size: 13px; display: block; word-break: break-all;">📁 Drag video file here or tap to open gallery</span>
+                        <input type="file" id="video-file-input" name="video_file" accept="video/*" onchange="updateFileNameDisplay()" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
                     </div>
                 </div>
 
@@ -89,8 +90,22 @@
 </div>
 
 <script>
+    // 📁 LIVE FILE NAME DISPLAY COUPLING FOR DESKTOP & MOBILE
+    function updateFileNameDisplay() {
+        const fileInput = document.getElementById('video-file-input');
+        const displaySpan = document.getElementById('file-display-name');
+        const dropZone = document.getElementById('drop-zone');
+        
+        if (fileInput.files && fileInput.files.length > 0) {
+            const name = fileInput.files[0].name;
+            displaySpan.innerHTML = `✅ Selected Asset: <strong style="color: #38bdf8;">${name}</strong>`;
+            dropZone.style.borderColor = "#34d399"; // Shifts box border color to green indicating data load
+            dropZone.style.background = "#0f1f1c";  // Tint style highlight
+        }
+    }
+
     function showProcessingState() {
-        document.getElementById('status-text').innerText = "⏳ Ingesting media stream matrix... Booting core rendering engine pipelines...";
+        document.getElementById('status-text').innerText = "⏳ Ingesting video layers... Slicing internet streams... Running core rendering backend...";
         document.getElementById('status-text').style.color = "#fbbf24";
         document.getElementById('processing-loader').style.clipPath = "none";
         document.getElementById('processing-loader').style.display = "block";
