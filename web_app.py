@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, send_from_directory, url_for
 import os
+import yt_dlp
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.VideoClip import ColorClip
 from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
@@ -24,7 +25,7 @@ def process_video():
     source_url = request.form.get('source_url')
     processing_mode = request.form.get('processing_mode')
     
-    # Secure numeric fallback options for cropping boundaries
+    # Secure numeric fallbacks for coordinates
     x = int(request.form.get('x', 0) or 0)
     y = int(request.form.get('y', 0) or 0)
     w = int(request.form.get('w', 100) or 100)
@@ -33,58 +34,73 @@ def process_video():
     video_file = request.files.get('video_file')
     input_path = ""
 
-    # BRANCH A: Process Cloud Link Ingestion
+    # 🔗 BRANCH A: PROCESS LIVE SOCIAL MEDIA URL
     if source_url and source_url.strip() != "":
-        print(f"[CLOUD INGESTION] Initializing fetch pipeline for URL: {source_url}")
-        # Placeholder for our upcoming backend link scraper tool (yt_dlp core loop)
-        return f"""
-        <body style="background-color: #0f172a; color: #f8fafc; font-family: sans-serif; text-align: center; padding: 50px;">
-            <div style="background: #1e293b; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 8px; border: 1px solid #334155;">
-                <h3 style="color: #f43f5e;">🔗 Cloud Scraping Core Route Hit</h3>
-                <p>Ingestion Target: <strong>{source_url}</strong></p>
-                <p>We verified the link handler loop! Next step is connecting the yt-dlp scraping binary package so your server can download directly from the cloud.</p>
-                <br><a href="/dashboard" style="color: #38bdf8; text-decoration: none;">Return to Workspace</a>
-            </div>
-        </body>
-        """
-    
-    # BRANCH B: Process Drag-and-Drop or Local File Choice
+        print(f"[CLOUD ENGINE] Initializing yt-dlp link download pipeline: {source_url}")
+        
+        # Unique filename template for this cloud download
+        cloud_filename = "cloud_download.mp4"
+        input_path = os.path.join(UPLOAD_FOLDER, cloud_filename)
+        
+        # Remove old cached cloud files if they exist to protect disk space
+        if os.path.exists(input_path):
+            os.remove(input_path)
+            
+        # Configuration rules for downloading safely from YouTube/Twitter/FB
+        ydl_opts = {
+            'format': 'best[ext=mp4]/best', # Get best MP4 format compatible with MoviePy
+            'outtmpl': input_path,          # Save exactly to our input path
+            'max_filesize': 50 * 1024 * 1024, # Limit to 50MB to protect free cloud space
+            'quiet': True,
+            'no_warnings': True
+        }
+        
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([source_url])
+            print("[CLOUD ENGINE] Successfully ingested streaming content directly into server folder!")
+        except Exception as e:
+            return f"<h3>Ingestion Scraper Failed</h3><p>Could not download link stream. Reason: {str(e)}</p><a href='/dashboard'>Try another link</a>", 400
+
+    # 📁 BRANCH B: PROCESS LOCAL FILE DRAG-AND-DROP
     elif video_file and video_file.filename != '':
         input_path = os.path.join(UPLOAD_FOLDER, video_file.filename)
         video_file.save(input_path)
     else:
-        return "Error Error: No streaming link or file payload detected. Drop a file or enter a valid URL.", 400
+        return "Error: No URL link or dropped video file detected.", 400
 
+    # 🎬 CORE VIDEO COMPRESSION & FORMATTING PIPELINE (MoviePy v2)
     try:
-        # Load the newly uploaded source media
         clip = VideoFileClip(input_path)
-        
-        # Target layout settings for matching standard Shorts formats
         target_w = 720
         target_h = 1280
         
+        # Cap clip length to 15 seconds max to guarantee super fast processing runs
+        duration_to_cut = min(clip.duration, 15)
+        working_clip = clip.subclipped(0, duration_to_cut)
+        
         if processing_mode == "smart_fit":
-            print("[ENGINE LOG] Running Smart-Fit compression padding routine...")
-            # Calculate ratio scale factor to preserve text/elements on outer borders
-            scale_factor = min(target_w / clip.w, target_h / clip.h)
-            scaled_clip = clip.resized(scale_factor)
+            print("[ENGINE LOG] Executing smart-fit boundary padding protection layout...")
+            scale_factor = min(target_w / working_clip.w, target_h / working_clip.h)
+            scaled_clip = working_clip.resized(scale_factor)
             
-            # Form clean slate canvas block backdrop
-            background = ColorClip(size=(target_w, target_h), color=(15, 23, 42)).with_duration(clip.duration)
+            background = ColorClip(size=(target_w, target_h), color=(15, 23, 42)).with_duration(duration_to_cut)
             final_clip = CompositeVideoClip([background, scaled_clip.with_position("center")])
         else:
-            print("[ENGINE LOG] Running centerpiece full-bleed extraction crop matrix...")
-            # Using MoviePy v2.X outplace '.cropped()' syntax structure
-            crop_width = int(clip.w * 0.5625)
-            x1 = int((clip.w - crop_width) / 2)
-            final_clip = clip.cropped(x1=x1, y1=0, width=crop_width, height=clip.h)
+            print("[ENGINE LOG] Executing standard full-bleed centerpiece crop matrix...")
+            crop_width = int(working_clip.w * 0.5625)
+            x1 = int((working_clip.w - crop_width) / 2)
+            final_clip = working_clip.cropped(x1=x1, y1=0, width=crop_width, height=working_clip.h)
             final_clip = final_clip.resized(newsize=(target_w, target_h))
 
-        output_filename = f"short_{video_file.filename}"
+        output_filename = f"short_out_{os.path.basename(input_path)}"
+        if not output_filename.endswith('.mp4'):
+            output_filename += '.mp4'
+            
         output_path = os.path.join(OUTPUT_FOLDER, output_filename)
         
-        # Keep process lengths limited to protect free tier instance CPU runtimes
-        final_clip.subclipped(0, min(clip.duration, 20)).write_videofile(
+        # Render the file
+        final_clip.write_videofile(
             output_path, 
             codec="libx264", 
             audio_codec="aac",
@@ -92,6 +108,7 @@ def process_video():
             logger=None
         )
         
+        # Close handles instantly to free memory channels
         clip.close()
         final_clip.close()
         
@@ -100,22 +117,23 @@ def process_video():
         return f"""
         <body style="background-color: #0f172a; color: #f8fafc; font-family: sans-serif; padding: 40px; text-align: center;">
             <div style="background: #1e293b; max-width: 600px; margin: 0 auto; padding: 30px; border-radius: 12px; border: 1px solid #334155;">
-                <h2 style="color: #38bdf8;">✨ Extraction Pipeline Complete!</h2>
-                <p>Your short file is processed and boundary-safeguarded.</p>
+                <h2 style="color: #38bdf8;">✨ Conversion Pipeline Complete!</h2>
+                <p>Your social media clip has been downloaded, processed, and optimized without edge text cut-offs.</p>
                 
                 <div style="background: #0f172a; border: 2px dashed #475569; padding: 15px; margin: 25px 0; border-radius: 6px;">
-                    <p style="color: #94a3b8; margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase;">Sponsored Placement</p>
-                    <a href="https://github.com/samuelnoah221" target="_blank" style="color: #38bdf8; font-weight: bold; text-decoration: none;">🚀 Traffic Accelerator Tools — Boost Your Scaling Speeds!</a>
+                    <p style="color: #94a3b8; margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase;">Sponsored Content Ad</p>
+                    <a href="https://github.com/samuelnoah221" target="_blank" style="color: #38bdf8; font-weight: bold; text-decoration: none;">🚀 Maximize Your Reach! Get Viral Automated Templates Here!</a>
                 </div>
                 
-                <a href="{download_url}" style="background: #0284c7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; margin-bottom: 20px;">📥 Download Processed Short File</a>
+                <a href="{download_url}" style="background: #0284c7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; margin-bottom: 20px;">📥 Download Processed Short</a>
                 <br>
                 <a href="/dashboard" style="color: #cbd5e1; text-decoration: none; font-size: 14px;">← Process Another Video</a>
             </div>
         </body>
         """
     except Exception as e:
-        return f"<h3>Processing Pipeline Halted</h3><p>Internal diagnostics error: {str(e)}</p><a href='/dashboard'>Return to try again</a>", 500
+        print(f"[PROCESS CRASH] {str(e)}")
+        return f"<h3>Core Rendering Blocked</h3><p>Error diagnostics: {str(e)}</p><a href='/dashboard'>Return to dashboard</a>", 500
 
 @app.route('/downloads/<filename>')
 def download_file(filename):
