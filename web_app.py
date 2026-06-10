@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, send_from_directory, url_for
 import os
-from moviepy.editor import VideoFileClip, ColorClip, CompositeVideoClip
+from moviepy.video.io.VideoFileClip import VideoFileClip
+from moviepy.video.VideoClip import ColorClip
+from moviepy.video.compositing.CompositeVideoClip import CompositeVideoClip
 
 app = Flask(__name__)
 
