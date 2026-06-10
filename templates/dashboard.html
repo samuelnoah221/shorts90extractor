@@ -11,11 +11,14 @@
                 <input type="url" name="source_url" placeholder="https://www.youtube.com/watch?v=...">
             </div>
             
-            <div style="text-align: center; margin: 15px 0; color: #64748b; font-weight: bold;">- OR USE MANUAL PAYLOAD -</div>
+            <div style="text-align: center; margin: 15px 0; color: #64748b; font-weight: bold; font-size:12px;">- OR CHOOSE LOCAL DEVICE PAYLOAD -</div>
             
             <div class="input-group">
-                <label>Drop Local Video File:</label>
-                <input type="file" name="video_file" accept="video/*">
+                <label>Upload or Drag & Drop Video File:</label>
+                <div style="border: 2px dashed #475569; padding: 25px; border-radius: 6px; text-align: center; background: #0f172a; cursor: pointer; position: relative;">
+                    <span style="color: #94a3b8; font-size: 14px;">Drag video directly here or click to select file</span>
+                    <input type="file" name="video_file" accept="video/*" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+                </div>
             </div>
 
             <hr style="border-color: #334155; margin: 20px 0;">
@@ -23,7 +26,7 @@
             <h3>🛠️ Smart Formatting Matrix</h3>
             <div class="input-group">
                 <label>Render Processing Style Strategy:</label>
-                <select name="processing_mode" style="width: 95%; padding: 10px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px;">
+                <select name="processing_mode" style="width: 100%; padding: 10px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px;">
                     <option value="smart_fit">Smart-Fit Outer Padding (Compresses Frame - Keeps Words Safe) 💎</option>
                     <option value="direct_crop">Centerpiece Proportional Vertical Bleed Crop</option>
                 </select>
@@ -45,11 +48,11 @@
         <div>
             <h3>📊 Engine Stream Monitor</h3>
             <div class="console-box">
-                <p class="status-text">Core environment operational. Awaiting client stream ingestion payload links...</p>
+                <p class="status-text">Core environment operational. Awaiting link stream ingestion payloads or local drag-drops...</p>
             </div>
         </div>
 
-        <div style="background: #0f172a; border: 2px dashed #e2e8f0; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
+        <div style="background: #0f172a; border: 2px dashed #cbd5e1; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
             <p style="color: #64748b; margin: 0 0 5px 0; font-size: 11px; text-transform: uppercase;">Premium Ad Banner Network Placement</p>
             <h4 style="color: #f43f5e; margin: 5px 0;">Monetize Traffic Instantly</h4>
             <p style="color: #94a3b8; font-size: 13px; margin: 0;">Once live traffic scales up, we can plug your unique ad scripts or crypto donation nodes right into this structural interface placeholder slot.</p>
