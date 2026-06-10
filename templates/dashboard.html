@@ -3,36 +3,56 @@
 <div class="dashboard-grid">
     
     <div class="panel settings-panel">
-        <h3>🛠️ Watermark Eraser Matrix</h3>
+        <h3>🚀 Multi-Platform Cloud Ingestion</h3>
         <form action="/process" method="POST" enctype="multipart/form-data">
+            
             <div class="input-group">
-                <label>X-Coordinate (Left Edge):</label>
-                <input type="number" name="x" value="40">
-            </div>
-            <div class="input-group">
-                <label>Y-Coordinate (Top Edge):</label>
-                <input type="number" name="y" value="40">
-            </div>
-            <div class="input-group">
-                <label>Box Width:</label>
-                <input type="number" name="w" value="150">
-            </div>
-            <div class="input-group">
-                <label>Box Height:</label>
-                <input type="number" name="h" value="60">
+                <label>Paste Cloud Video URL (YouTube, Twitter, Facebook, etc.):</label>
+                <input type="url" name="source_url" placeholder="https://www.youtube.com/watch?v=...">
             </div>
             
-            <h3 style="margin-top:25px;">📁 Drop Video Payload</h3>
-            <input type="file" name="video_file" accept="video/*" required><br><br>
+            <div style="text-align: center; margin: 15px 0; color: #64748b; font-weight: bold;">- OR USE MANUAL PAYLOAD -</div>
             
-            <button type="submit" class="run-btn">✨ Execute Extraction Pipeline</button>
+            <div class="input-group">
+                <label>Drop Local Video File:</label>
+                <input type="file" name="video_file" accept="video/*">
+            </div>
+
+            <hr style="border-color: #334155; margin: 20px 0;">
+
+            <h3>🛠️ Smart Formatting Matrix</h3>
+            <div class="input-group">
+                <label>Render Processing Style Strategy:</label>
+                <select name="processing_mode" style="width: 95%; padding: 10px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px;">
+                    <option value="smart_fit">Smart-Fit Outer Padding (Compresses Frame - Keeps Words Safe) 💎</option>
+                    <option value="direct_crop">Centerpiece Proportional Vertical Bleed Crop</option>
+                </select>
+            </div>
+            
+            <h4 style="margin-top:20px; color: #94a3b8;">🎯 Watermark Matrix Eraser Bounds (Optional)</h4>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="input-group"><label>X position:</label><input type="number" name="x" value="0"></div>
+                <div class="input-group"><label>Y position:</label><input type="number" name="y" value="0"></div>
+                <div class="input-group"><label>Width:</label><input type="number" name="w" value="100"></div>
+                <div class="input-group"><label>Height:</label><input type="number" name="h" value="50"></div>
+            </div>
+            
+            <button type="submit" class="run-btn" style="width: 100%; margin-top: 20px;">✨ Execute Intelligent Extraction Pipeline</button>
         </form>
     </div>
 
-    <div class="panel status-panel">
-        <h3>📊 System Live Stream Monitor</h3>
-        <div class="console-box">
-            <p class="status-text">Core environment operational. Awaiting client upload request...</p>
+    <div class="panel status-panel" style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+            <h3>📊 Engine Stream Monitor</h3>
+            <div class="console-box">
+                <p class="status-text">Core environment operational. Awaiting client stream ingestion payload links...</p>
+            </div>
+        </div>
+
+        <div style="background: #0f172a; border: 2px dashed #e2e8f0; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
+            <p style="color: #64748b; margin: 0 0 5px 0; font-size: 11px; text-transform: uppercase;">Premium Ad Banner Network Placement</p>
+            <h4 style="color: #f43f5e; margin: 5px 0;">Monetize Traffic Instantly</h4>
+            <p style="color: #94a3b8; font-size: 13px; margin: 0;">Once live traffic scales up, we can plug your unique ad scripts or crypto donation nodes right into this structural interface placeholder slot.</p>
         </div>
     </div>
 
