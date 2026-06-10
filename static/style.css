@@ -1,28 +1,53 @@
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #0f172a;
-    color: #f8fafc;
-}
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1e293b;
-    padding: 15px 30px;
-    border-bottom: 2px solid #334155;
-}
-.logo { font-size: 24px; font-weight: bold; color: #38bdf8; }
-.nav-links { display: flex; list-style: none; gap: 20px; margin: 0; padding: 0; }
-.nav-links a { color: #cbd5e1; text-decoration: none; font-weight: 500; }
-.nav-links a:hover { color: #38bdf8; }
-.main-container { padding: 40px; max-width: 1200px; margin: 0 auto; }
-.welcome-box { text-align: center; margin-top: 80px; }
-.cta-btn, .run-btn { background: #0284c7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; }
-.cta-btn:hover, .run-btn:hover { background: #0369a1; }
-.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
-.panel { background: #1e293b; padding: 25px; border-radius: 10px; border: 1px solid #334155; }
-.input-group { margin-bottom: 15px; }
-.input-group label { display: block; margin-bottom: 5px; color: #94a3b8; }
-.input-group input { width: 90%; padding: 8px; background: #0f172a; border: 1px solid #475569; color: white; border-radius: 4px; }
-.console-box { background: #0f172a; border-left: 4px solid #38bdf8; padding: 15px; font-family: monospace; min-height: 150px; }
+/* ==========================================
+   📱 MOBILE RESPONSIVENESS MEDIA MATRIX 
+   ========================================== */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 15px; /* Reduce massive padding on small screens */
+    }
+
+    .navbar {
+        flex-direction: column; /* Stack logo and navigation links vertically */
+        gap: 12px;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr; /* Force columns to stack vertically into 1 row */
+        gap: 20px;
+    }
+
+    .input-group input {
+        width: 100%; /* Stretch input fields to take full phone screen width */
+        box-sizing: border-box; /* Prevent inputs from breaking out of the container border */
+        padding: 12px; /* Make text boxes larger and easier to tap with thumbs */
+        font-size: 16px; /* Prevents iOS/Safari from auto-zooming when tapping inputs */
+    }
+
+    select {
+        width: 100% !important;
+        padding: 12px !important;
+        font-size: 16px !important;
+    }
+
+    .run-btn {
+        padding: 15px; /* Bigger tap area for mobile finger touch zones */
+        font-size: 16px;
+    }
+
+    .welcome-box {
+        margin-top: 40px;
+        padding: 0 10px;
+    }
+    
+    .welcome-box h1 {
+        font-size: 24px; /* Scale down the huge title so it doesn't wrap weirdly */
+    }
+            }
