@@ -1,8 +1,0 @@
-{% extends "layout.html" %}
-{% block content %}
-<div class="welcome-box">
-    <h1>Welcome to the Future of Shorts Automation 🚀</h1>
-    <p>An advanced engineering portal built to dynamically scan audio tracks, extract peak highlights, and auto-erase watermarks seamlessly.</p>
-    <a href="{{ url_for('dashboard') }}" class="cta-btn">Enter Workspace Dashboard</a>
-</div>
-{% endblock %}
